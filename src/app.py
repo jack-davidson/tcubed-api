@@ -2,6 +2,7 @@
 import flask
 import markdown
 import math
+import typing
 import json
 
 app = flask.Flask(__name__)
@@ -14,7 +15,7 @@ players = {
 }
 
 
-def api_response(obj):
+def api_response(obj) -> typing.Callable[[typing.Callable, str], flask.Response]:
     return flask.Response(json.dumps(obj), mimetype="application/json")
 
 
@@ -37,7 +38,7 @@ def eval_board(board: list[list[int]]) -> int:
 
 
 @app.route("/board/<board>/turn/<turn>")
-def board(board, turn):
+def board(board, turn) -> flask.Response:
     return api_response(deserialize_board(board))
 
 
