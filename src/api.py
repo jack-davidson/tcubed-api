@@ -3,9 +3,9 @@ from fastapi.responses import HTMLResponse
 
 from markdown import markdown
 
-from board import Board
+from board import Board, BoardSizeNotSquareError
 
-app = FastAPI()
+api = FastAPI()
 
 
 def error(exception_name: str, message=None):
@@ -17,7 +17,7 @@ def error(exception_name: str, message=None):
     return response
 
 
-@app.get('/', response_class=HTMLResponse)
+@api.get('/', response_class=HTMLResponse)
 def home():
     with open("../doc/api_home.md", "r") as fd:
         api_home = fd.read()
@@ -26,14 +26,14 @@ def home():
     return markdown(api_home)
 
 
-@app.get("/board/{board_string}/turn/{turn}")
+@api.get("/board/{board_string}/turn/{turn}")
 def board(board_string: str, turn: str, response: Response):
     try:
         board = Board(board_string)
 
-    except Board.BoardSizeNotSquareError:
+    except BoardSizeNotSquareError:
         response.status_code = status.HTTP_400_BAD_REQUEST
-        return error("Board.BoardSizeNotSquareError",
+        return error("BoardSizeNotSquareError",
                      message="Board Size not perfect square.")
 
     return board.board

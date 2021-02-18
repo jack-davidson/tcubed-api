@@ -9,11 +9,16 @@ players = {
 }
 
 
+# Board size is not perfect square.
+class BoardSizeNotSquareError(Exception):
+    pass
+
+
 class Board:
     def __init__(self, board_string: str):
         size = len(board_string)
         if not perfect_square(size):
-            raise Board.BoardSizeNotSquareError
+            raise BoardSizeNotSquareError
 
         # 'Allocate' a square board.
         self.board = [[players['E']] * int_sqrt(size)] * int_sqrt(size)
@@ -39,8 +44,4 @@ class Board:
 
     # Evaluate score of board.
     def eval(self) -> int:
-        pass
-
-    # Board size is not perfect square.
-    class BoardSizeNotSquareError(Exception):
         pass
