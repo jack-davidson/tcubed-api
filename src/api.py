@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response
 
 from fastapi.responses import HTMLResponse, JSONResponse
 
@@ -6,11 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from markdown import markdown
 
-from board import board_string_to_matrix
+from board import board_string_to_matrix, board_matrix_to_string
 
-from errors import Errors
-
-import config
+from player import Player
 
 api = FastAPI()
 
@@ -27,13 +25,13 @@ api.add_middleware(
 
 
 # home route renders markdown homepage
-@api.get('/')
+@api.get('/', response_class=HTMLResponse)
 def home():
     with open("../doc/api_home.md", "r") as fd:
         api_home = fd.read()
         fd.close
 
-    return HTMLResponse(markdown(api_home))
+    return markdown(api_home)
 
 
 # receives board encoded as string and turn
@@ -41,3 +39,8 @@ def home():
 @api.get("/board/{board_string}/player/{player}", response_class=JSONResponse)
 def board(board_string: str, player: str, response: Response):
     return board_string_to_matrix(board_string)
+
+
+@api.get("/test/board_matrix_to_string")
+def test_board_matrix_to_string():
+    return board_matrix_to_string([[Player.E] * 3] * 3)

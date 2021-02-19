@@ -1,4 +1,5 @@
 from player import Player
+from math import sqrt
 
 # TODO:
 # [ ] set_board()
@@ -12,15 +13,30 @@ players = {
     'O': 2,  # O: player 'O'
 }
 
+# reverse player lookup
+reverse_players = {
+    0: 'E',
+    1: 'X',
+    2: 'O',
+}
+
 
 def board_string_to_matrix(board_string: str) -> list[Player]:
-    board_list = []
-
-    for spot in board_string:
-        board_list.append(players[spot])
-
     board = []
-    for i in range(9):
-        if i % 3 == 0:
-            board.append([i for i in board_list[i:i+3]])
+    length = len(board_string)
+
+    for i in range(length):
+        if not i % int(sqrt(length)):
+            board.append([i for i in list(map(lambda c: players[c],
+                                              list(board_string)))[i:i+3]])
+
     return board
+
+
+def board_matrix_to_string(board_matrix: list[Player]) -> str:
+    board_string = ""
+    for row in board_matrix:
+        for player in row:
+            board_string += reverse_players[player]
+
+    return board_string
