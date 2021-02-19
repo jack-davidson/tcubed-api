@@ -1,4 +1,3 @@
-from square import int_sqrt, perfect_square
 import config
 
 # TODO:
@@ -14,9 +13,14 @@ players = {
 }
 
 
-def convert_board_string(board_string: str):
+def board_string_to_matrix(board_string: str):
+    board_list = []
+
+    for spot in board_string:
+        board_list.append(players[spot])
+
     board = []
     for i in range(9):
         if i % 3 == 0:
-            board.append([i for i in board_string[i:i+3]])
+            board.append([i for i in board_list[i:i+3]])
     return board

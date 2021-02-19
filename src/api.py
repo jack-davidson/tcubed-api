@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from markdown import markdown
 
-from board import convert_board_string
+from board import board_string_to_matrix
 
 from errors import Errors
 
@@ -40,4 +40,4 @@ def home():
 # returns coordinates of best move
 @api.get("/board/{board_string}/player/{player}", response_class=JSONResponse)
 def board(board_string: str, player: str, response: Response):
-    return convert_board_string(board_string)
+    return board_string_to_matrix(board_string)
