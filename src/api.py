@@ -6,15 +6,18 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from markdown import markdown
 
-from board import board_string_to_matrix, board_matrix_to_string
+from board import board_string_to_matrix, board_matrix_to_string, eval_board
 
 from player import Player
 
+
 api = FastAPI()
+
 
 origins = [
     "http://0.0.0.0:8000",
 ]
+
 
 api.add_middleware(
     CORSMiddleware,
@@ -44,3 +47,8 @@ def board(board_string: str, player: str, response: Response):
 @api.get("/test/board_matrix_to_string")
 def test_board_matrix_to_string():
     return board_matrix_to_string([[Player.E] * 3] * 3)
+
+
+@api.get("/test/eval_board")
+def test_eval_board():
+    return eval_board([[Player.O] * 3] * 3)
