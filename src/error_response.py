@@ -1,4 +1,8 @@
-def error(exception_name: str, message=None):
+class ErrorResponse:
+    pass
+
+
+def err(exception_name: str, message=None):
     response = {"error": exception_name}
 
     if message:

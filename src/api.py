@@ -6,15 +6,16 @@ from markdown import markdown
 
 from board import Board
 from board import players
-from board import BoardSizeNotSquareError, InvalidPlayerError
+from board import BoardSizeNotSquareError
 
-from error import error
+from errors import Errors
 
 import config
 
 api = FastAPI()
 
 
+# home route renders markdown homepage
 @api.get('/')
 def home():
     with open("../doc/api_home.md", "r") as fd:
@@ -28,22 +29,15 @@ def home():
 # returns coordinates of best move
 @api.get("/board/{board_string}/player/{player}", response_class=JSONResponse)
 def board(board_string: str, player: str, response: Response):
+    if player != config.maximizer:
+        if player != config.minimizer:
+            return Errors.invalid_player_error()
+
     try:
         board = Board(len(board_string), players[player])
 
-    except KeyError:
-        if player is not config.maximizer or config.minimizer:
-            return error("InvalidPlayerError",
-                         f"Player is not {config.maximizer}"
-                         "or {config.minimizer}.")
-
     except BoardSizeNotSquareError:
         response.status_code = status.HTTP_400_BAD_REQUEST
-        return error("BoardSizeNotSquareError",
-                     "Board Size not square.")
-
-    except InvalidPlayerError:
-        return error("InvalidPlayerError", f"Player is not {config.maximizer}"
-                     "or {config.minimizer}.")
+        return Errors.board_size_not_square_error()
 
     return board.board
