@@ -6,9 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from markdown import markdown
 
-from board import Board
-from board import players
-from board import BoardSizeNotSquareError
+from board import convert_board_string
 
 from errors import Errors
 
@@ -42,15 +40,4 @@ def home():
 # returns coordinates of best move
 @api.get("/board/{board_string}/player/{player}", response_class=JSONResponse)
 def board(board_string: str, player: str, response: Response):
-    if player != config.maximizer:
-        if player != config.minimizer:
-            return Errors.invalid_player_error()
-
-    try:
-        board = Board(len(board_string), players[player])
-
-    except BoardSizeNotSquareError:
-        response.status_code = status.HTTP_400_BAD_REQUEST
-        return Errors.board_size_not_square_error()
-
-    return board.board
+    return convert_board_string(board_string)
