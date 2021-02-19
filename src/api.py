@@ -2,6 +2,8 @@ from fastapi import FastAPI, Response, status
 
 from fastapi.responses import HTMLResponse, JSONResponse
 
+from fastapi.middleware.cors import CORSMiddleware
+
 from markdown import markdown
 
 from board import Board
@@ -13,6 +15,17 @@ from errors import Errors
 import config
 
 api = FastAPI()
+
+origins = [
+    "http://0.0.0.0:8000",
+]
+
+api.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # home route renders markdown homepage
