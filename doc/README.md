@@ -2,21 +2,21 @@
 
 ## routes
 
-### `board/<board>/turn/<turn>`
-`GET /board/<board_string>/turn/<turn> -> "[<x>, <y>]"`
+### `board/<board>/player/<player>`
+`GET /board/<board_string>/player/<player> -> "[<x>, <y>]"`
 
-Given the current board `<board_string>` and current turn `<turn>`, choose the
+Given the current board `<board_string>` and current player `<player>`, choose the
 best move and return json encoded coordinates of the best move.
 
-`<turn>` may be `X` or `O`
+`<player>` may be `X` or `O`
 
 `<board>` is encoded as a string where:
 ```
 url encoded | representation in program
 ---------------------------------------
 E           | EMPTY
-X           | X
-O           | O
+X           | X player (maximizer)
+O           | O player (minimizer)
 ```
 for example, a tic tac toe board:
 ```

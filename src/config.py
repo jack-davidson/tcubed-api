@@ -1,5 +1,5 @@
-BOARD_SIZE = 9  # elements in board, must have even square root to be a square
-DEFAULT_TURN = 'X'  # first turn to play
-MAXIMIZER = DEFAULT_TURN  # default turn is also maximizer
+board_size = 9  # elements in board, must have even square root to be a square
+default_turn = 'X'  # first turn to play
+maximizer = default_turn  # default turn is also maximizer
 
-MINIMIZER = 'O'
+minimizer = 'O'

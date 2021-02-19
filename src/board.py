@@ -14,6 +14,11 @@ players = {
 }
 
 
+# player is not Maximizer/Minimizer
+class InvalidPlayerError(Exception):
+    pass
+
+
 # Board size is not perfect square.
 class BoardSizeNotSquareError(Exception):
     pass
@@ -24,10 +29,14 @@ class Board:
         if not perfect_square(size):
             raise BoardSizeNotSquareError
 
-        # 'Allocate' a square board.
-        self.board = [[players['E']] * int_sqrt(size)] * int_sqrt(size)
+        if turn != players[config.maximizer]:
+            if turn != players[config.minimizer]:
+                raise InvalidPlayerError
 
         self.turn = turn
+
+        # 'Allocate' a square board.
+        self.board = [[players['E']] * int_sqrt(size)] * int_sqrt(size)
 
     # TODO
     def set_board():
@@ -57,7 +66,10 @@ class Board:
 
         # Check rows for win.
         for row in self.board:
-            if sum(row) == players[config.MAXIMIZER] * len(row):
+            if sum(row) == players[config.maximizer] * len(row):
                 return 10
-            elif sum(row) == players[config.MINIMIZER] * len(row):
+            elif sum(row) == players[config.minimizer] * len(row):
                 return -10
+
+        # TODO check columns for win
+        # TODO check diagonals for win
