@@ -1,4 +1,4 @@
-import config
+from player import Player
 
 # TODO:
 # [ ] set_board()
@@ -13,7 +13,7 @@ players = {
 }
 
 
-def board_string_to_matrix(board_string: str):
+def board_string_to_matrix(board_string: str) -> list[Player]:
     board_list = []
 
     for spot in board_string:
