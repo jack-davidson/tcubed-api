@@ -4,10 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from markdown import markdown
 
-from board import find_best_move, board_string_to_matrix
-
-from player import players
-
+from board import find_best_move
 
 api = FastAPI()
 
@@ -18,7 +15,6 @@ api.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # home route renders markdown homepage
 @api.get('/', response_class=HTMLResponse)
@@ -33,7 +29,6 @@ def home():
 # receives board encoded as string and turn
 # returns coordinates of best move
 @api.get("/board/{board_string}/player/{player}", response_class=JSONResponse)
-def board(board_string: str, player: str, response: Response):
-    board_matrix = board_string_to_matrix(board_string)
-    best_move = find_best_move(board_matrix, players[player])
-    return best_move
+def board(board_string: str, player: str, response: Response):  
+    ans = find_best_move(board_string, player, 'O' if player == 'X' else 'X')
+    return ans
