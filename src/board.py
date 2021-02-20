@@ -69,7 +69,7 @@ def minimax(board, depth, isMax, player, opponent):
 
     # If there are no more moves and no winner then
     # it is a tie
-    if (isMovesLeft(board) == False):
+    if (not isMovesLeft(board)):
         return 0
 
     # If this maximizer's move
