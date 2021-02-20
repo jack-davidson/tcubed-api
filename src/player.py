@@ -4,6 +4,9 @@ class Player:
     X = 1
     O = 2
 
+    def toggle(player: 'Player') -> 'Player':
+        return Player.O if player is Player.X else Player.X
+
 
 # player lookup
 players = {

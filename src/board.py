@@ -19,7 +19,7 @@ def board_string_to_matrix(board_string: str) -> list[Player]:
 
 
 # Serialize a board.
-def board_matrix_to_string(board_matrix: list[Player]) -> str:
+def board_matrix_to_string(board_matrix: list[list[Player]]) -> str:
     board_string = ""
     for row in board_matrix:
         for cell in row:
@@ -30,7 +30,7 @@ def board_matrix_to_string(board_matrix: list[Player]) -> str:
 
 # Search board for empty cells, if there are any, there are moves left and
 # return True.
-def moves_left(board_matrix: list[Player]) -> bool:
+def moves_left(board_matrix: list[list[Player]]) -> bool:
     for row in board_matrix:
         for cell in row:
             if cell == Player.E:
@@ -41,7 +41,7 @@ def moves_left(board_matrix: list[Player]) -> bool:
 
 # Evaluate board and return a score.
 # This is a naïve solution and only works with 3x3 boards.
-def eval_board(board_matrix: list[Player]) -> int:
+def eval_board(board_matrix: list[list[Player]]) -> int:
     for row in range(0, 3):
         if board_matrix[row][0] == board_matrix[row][1] and board_matrix[row][1] == board_matrix[row][2]:
             if board_matrix[row][0] == Player.X:
@@ -69,3 +69,55 @@ def eval_board(board_matrix: list[Player]) -> int:
             return -10
 
     return 0
+
+
+# minimax algorithm
+# must be reimplemented for use with arbitrarily sized boards
+def minimax(board_matrix: list[list[Player]], depth: int, player: Player) -> int:
+    score = eval_board(board_matrix)
+
+    if score == 10 or -10:
+        return score
+
+    if not moves_left(board_matrix):
+        return 0
+
+    if player == Player.X:
+        best = -1000
+
+        for i in range(3):
+            for j in range(3):
+                if board_matrix[i][j] == Player.E:
+                    board_matrix[i][j] = player
+                    best = max(best, minimax(board_matrix,
+                                             depth + 1,
+                                             Player.toggle(player)))
+                    board_matrix[i][j] = Player.E
+        return best
+    else:
+        best = 1000
+        for i in range(3):
+            for j in range(3):
+                if board_matrix[i][j] == Player.E:
+                    board_matrix[i][j] = Player.toggle(player)
+                    best = min(best, minimax(board_matrix,
+                                             depth + 1,
+                                             Player.toggle(player)))
+        return best
+
+
+def find_best_move(board_matrix: list[list[Player]], player: Player) -> tuple[int]:
+    best_score = -1000
+    best_move = (-1, -1)
+
+    for i in range(3):
+        for j in range(3):
+            if board_matrix[i][j] == Player.E:
+                board_matrix[i][j] = player
+                score = minimax(board_matrix, 0, player)
+                board_matrix[i][j] = Player.E
+                if score > best_score:
+                    best_move = (i, j)
+                    best_score = score
+
+    return best_move
