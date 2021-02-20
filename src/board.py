@@ -155,7 +155,7 @@ def best_move(board, player, opponent):
     return bestMove
 
 
-def deserialize_board(board_string):
+def deserialize_board(board_string: str) -> list[list['Player']]:
     return [
         [x for x in board_string[i:i + int(sqrt(len(board_string)))]]
         for i in range(0, len(board_string), int(sqrt(len(board_string))))]
