@@ -41,7 +41,7 @@ def home():
 # returns coordinates of best move
 @api.get("/board/{board_string}/player/{player}", response_class=JSONResponse)
 def board(board_string, player, response):
-    return find_best_move(board_string_to_matrix(board_string), players[player])
+    return find_best_move(board_string_to_matrix(board_string), player, player == 'X' ? 'O' : 'X')
 
 
 @api.get("/test/board_matrix_to_string")
