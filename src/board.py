@@ -1,18 +1,15 @@
-
+# Scan board for more moves
 def isMovesLeft(board):
-
     for i in range(3):
         for j in range(3):
             if (board[i][j] == 'E'):
                 return True
     return False
 
+
 # This is the evaluation function as discussed
 # in the previous article ( http://goo.gl/sJgv68 )
-
-
 def evaluate(b, player, opponent):
-
     # Checking for Rows for X or O victory.
     for row in range(3):
         if (b[row][0] == b[row][1] and b[row][1] == b[row][2]):
@@ -49,11 +46,10 @@ def evaluate(b, player, opponent):
     # Else if none of them have won then return 0
     return 0
 
+
 # This is the minimax function. It considers all
 # the possible ways the game can go and returns
 # the value of the board
-
-
 def minimax(board, depth, isMax, player, opponent):
     score = evaluate(board, player, opponent)
 
@@ -119,9 +115,8 @@ def minimax(board, depth, isMax, player, opponent):
                     board[i][j] = 'E'
         return best
 
+
 # This will return the best possible move for the player
-
-
 def getBestMove(board, player, opponent):
     bestVal = -1000
     bestMove = (-1, -1)
@@ -157,20 +152,6 @@ def getBestMove(board, player, opponent):
     return bestMove
 
 
-def reverse_board(board):
-
-    tmp = board
-    for r in range(3):
-        for c in range(3):
-            if(board[r][c] == 'X'):
-                tmp[r][c] = 'O'
-            elif(board[r][c] == 'O'):
-                tmp[r][c] = 'X'
-            print(board[r][c], end="")
-        print()
-    return tmp
-
-
 def find_best_move(board_str, player, opponent):
     board = [['E', 'E', 'E'], ['E', 'E', 'E'], ['E', 'E', 'E']]
     itr = 0
@@ -179,8 +160,6 @@ def find_best_move(board_str, player, opponent):
             board[i][j] = board_str[itr]
             itr += 1
     b = board
-    # if(player == 'O'):
-    #     b = reverse_board(board)
 
     bestMove = getBestMove(b, player, opponent)
     return bestMove
