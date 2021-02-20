@@ -50,10 +50,8 @@ def evaluate(board: list[list[Player]], player: Player) -> bool:
 
 def minimax(board: list[list[Player]], depth: int, is_max: bool, player: Player):
     score = evaluate(board, player)
-    if score == 10:
-        return score
 
-    if score == -10:
+    if score != 0:
         return score
 
     if not moves_left(board):
@@ -65,8 +63,8 @@ def minimax(board: list[list[Player]], depth: int, is_max: bool, player: Player)
             for j in range(3):
                 if board[i][j] == Player.E:
                     board[i][j] = player
-                    best = max(best, minimax(board, depth + 1, not is_max,
-                                             player))
+                    best = max(best,
+                               minimax(board, depth + 1, not is_max, player))
                     board[i][j] = Player.E
 
         return best
@@ -85,19 +83,20 @@ def minimax(board: list[list[Player]], depth: int, is_max: bool, player: Player)
 
 
 def best_move(board, player):
-    best_val = -1000
-    best_move = (-1, -1)
+    best_move: tuple[tuple[int]]
+    best_score = -1000
 
     for i in range(3):
         for j in range(3):
             if board[i][j] == Player.E:
                 board[i][j] = player
-                move_val = minimax(board, 0, False, player)
+                score = minimax(board, 0, False, player)
                 board[i][j] = Player.E
-                if move_val > best_val:
+
+                if score > best_score:
                     best_move = (i, j)
-                    best_val = move_val
-    print(best_move)
+                    best_score = score
+
     return best_move
 
 
