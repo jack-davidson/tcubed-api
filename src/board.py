@@ -152,14 +152,15 @@ def getBestMove(board, player, opponent):
     return bestMove
 
 
-def find_best_move(board_str, player, opponent):
+def deserialize_board(board_string):
     board = [['E', 'E', 'E'], ['E', 'E', 'E'], ['E', 'E', 'E']]
-    itr = 0
+    c = 0  # board_string iterator
     for i in range(3):
         for j in range(3):
-            board[i][j] = board_str[itr]
-            itr += 1
-    b = board
+            board[i][j] = board_string[c]
+            c += 1
+    return board
 
-    bestMove = getBestMove(b, player, opponent)
-    return bestMove
+
+def find_best_move(board_string, player, opponent):
+    return getBestMove(deserialize_board(board_string), player, opponent)
