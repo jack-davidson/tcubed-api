@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from markdown import markdown
 
-from board import deserialize_board, best_move
+from new_board import deserialize_board, best_move
 
 from square import perfect_square
 
@@ -38,6 +38,4 @@ def board(board_string: str, player: str, response: Response):
     if not perfect_square(len(board_string)):
         return {"error": "length(board_string) not perfect square"}
 
-    return best_move(deserialize_board(board_string),
-                     Player.string(Player.player(player)),
-                     Player.string(-Player.player(player)))
+    return best_move(deserialize_board(board_string), Player.player(player))

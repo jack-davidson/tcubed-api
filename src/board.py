@@ -1,161 +1,107 @@
 from math import sqrt
+from player import Player
 
 
-# Scan board for more moves
-def isMovesLeft(board):
-    for i in range(3):
-        for j in range(3):
-            if (board[i][j] == 'E'):
+def moves_left(board: list[list[Player]]) -> bool:
+    for row in board:
+        for cell in row:
+            if cell == Player.E:
                 return True
     return False
 
 
-# This is the evaluation function as discussed
-# in the previous article ( http://goo.gl/sJgv68 )
-def evaluate(b, player, opponent):
+def evaluate(board: list[list[Player]], player: Player) -> bool:
     # Checking for Rows for X or O victory.
     for row in range(3):
-        if (b[row][0] == b[row][1] and b[row][1] == b[row][2]):
-            if (b[row][0] == player):
+        if board[row][0] == board[row][1] and board[row][1] == board[row][2]:
+            if board[row][0] == player:
                 return 10
-            elif (b[row][0] == opponent):
+
+            elif board[row][0] == -player:
                 return -10
 
     # Checking for Columns for X or O victory.
     for col in range(3):
-
-        if (b[0][col] == b[1][col] and b[1][col] == b[2][col]):
-
-            if (b[0][col] == player):
+        if board[0][col] == board[1][col] and board[1][col] == board[2][col]:
+            if board[0][col] == player:
                 return 10
-            elif (b[0][col] == opponent):
+
+            elif board[0][col] == -player:
                 return -10
 
     # Checking for Diagonals for X or O victory.
-    if (b[0][0] == b[1][1] and b[1][1] == b[2][2]):
-
-        if (b[0][0] == player):
+    if board[0][0] == board[1][1] and board[1][1] == board[2][2]:
+        if board[0][0] == player:
             return 10
-        elif (b[0][0] == opponent):
+
+        elif board[0][0] == -player:
             return -10
 
-    if (b[0][2] == b[1][1] and b[1][1] == b[2][0]):
-
-        if (b[0][2] == player):
+    if board[0][2] == board[1][1] and board[1][1] == board[2][0]:
+        if board[0][2] == player:
             return 10
-        elif (b[0][2] == opponent):
+
+        elif board[0][2] == -player:
             return -10
 
     # Else if none of them have won then return 0
     return 0
 
 
-# This is the minimax function. It considers all
-# the possible ways the game can go and returns
-# the value of the board
-def minimax(board, depth, isMax, player, opponent):
-    score = evaluate(board, player, opponent)
-
-    # If Maximizer has won the game return his/her
-    # evaluated score
-    if (score == 10):
+def minimax(board: list[list[Player]], depth: int, is_max: bool, player: Player):
+    score = evaluate(board, player)
+    if score == 10:
         return score
 
-    # If Minimizer has won the game return his/her
-    # evaluated score
-    if (score == -10):
+    if score == -10:
         return score
 
-    # If there are no more moves and no winner then
-    # it is a tie
-    if (not isMovesLeft(board)):
+    if not moves_left(board):
         return 0
 
-    # If this maximizer's move
-    if (isMax):
+    if is_max:
         best = -1000
-
-        # Traverse all cells
         for i in range(3):
             for j in range(3):
-
-                # Check if cell is empty
-                if (board[i][j] == 'E'):
-
-                    # Make the move
+                if board[i][j] == Player.E:
                     board[i][j] = player
+                    best = max(best, minimax(board, depth + 1, not is_max,
+                                             player))
+                    board[i][j] = Player.E
 
-                    # Call minimax recursively and choose
-                    # the maximum value
-                    best = max(best, minimax(board,
-                                             depth + 1,
-                                             not isMax, player, opponent))
-
-                    # Undo the move
-                    board[i][j] = 'E'
         return best
 
-    # If this minimizer's move
     else:
         best = 1000
-
-        # Traverse all cells
         for i in range(3):
             for j in range(3):
+                if board[i][j] == Player.E:
+                    board[i][j] = -player
+                    best = min(best, minimax(board, depth + 1, not is_max,
+                                             player))
+                    board[i][j] = Player.E
 
-                # Check if cell is empty
-                if (board[i][j] == 'E'):
-
-                    # Make the move
-                    board[i][j] = opponent
-
-                    # Call minimax recursively and choose
-                    # the minimum value
-                    best = min(best, minimax(board, depth + 1,
-                                             not isMax, player, opponent))
-
-                    # Undo the move
-                    board[i][j] = 'E'
         return best
 
 
-# This will return the best possible move for the player
-def best_move(board, player, opponent):
-    bestVal = -1000
-    bestMove = (-1, -1)
+def best_move(board, player):
+    best_val = -1000
+    best_move = (-1, -1)
 
-    # Traverse all cells, evaluate minimax function for
-    # all empty cells. And return the cell with optimal
-    # value.
     for i in range(3):
         for j in range(3):
-            print("({}, {})".format(i, j))
-            # Check if cell is empty
-            if (board[i][j] == 'E'):
-
-                # Make the move
+            if board[i][j] == Player.E:
                 board[i][j] = player
-
-                # compute evaluation function for this
-                # move.
-                moveVal = minimax(board, 0, False, player, opponent)
-
-                # Undo the move
-                board[i][j] = 'E'
-
-                # If the value of the current move is
-                # more than the best value, then update
-                # best/
-                if (moveVal > bestVal):
-                    bestMove = (i, j)
-                    bestVal = moveVal
-
-    print("The value of the best Move is :", bestVal)
-    print()
-    return bestMove
+                move_val = minimax(board, 0, False, player)
+                board[i][j] = Player.E
+                if move_val > best_val:
+                    best_move = (i, j)
+                    best_val = move_val
+    print(best_move)
+    return best_move
 
 
-def deserialize_board(board_string: str) -> list[list['Player']]:
+def deserialize_board(board: str) -> list[list[Player]]:
     return [
-        [x for x in board_string[i:i + int(sqrt(len(board_string)))]]
-        for i in range(0, len(board_string), int(sqrt(len(board_string))))]
+        [Player.player(x) for x in board[i:i + int(sqrt(len(board)))]]
+        for i in range(0, len(board), int(sqrt(len(board))))]
