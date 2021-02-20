@@ -1,12 +1,6 @@
 from math import sqrt
 
 
-class Player:
-    O = -1
-    E = 0
-    X = 1
-
-
 # Scan board for more moves
 def isMovesLeft(board):
     for i in range(3):
