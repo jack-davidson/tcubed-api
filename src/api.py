@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from markdown import markdown
 
-from new_board import deserialize_board, best_move
+from board import deserialize_board, best_move
 
 from square import perfect_square
 
