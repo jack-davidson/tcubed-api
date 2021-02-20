@@ -16,6 +16,7 @@ api.add_middleware(
     allow_headers=["*"],
 )
 
+
 # home route renders markdown homepage
 @api.get('/', response_class=HTMLResponse)
 def home():
@@ -26,7 +27,7 @@ def home():
     return markdown(api_home)
 
 
-# receives board encoded as string and turn
+# receives board encoded as string and current player
 # returns coordinates of best move
 @api.get("/board/{board_string}/player/{player}", response_class=JSONResponse)
 def board(board_string: str, player: str, response: Response):
