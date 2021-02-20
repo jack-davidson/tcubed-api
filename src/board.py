@@ -1,3 +1,6 @@
+from math import sqrt
+
+
 # Scan board for more moves
 def isMovesLeft(board):
     for i in range(3):
@@ -152,14 +155,9 @@ def getBestMove(board, player, opponent):
     return bestMove
 
 
-def find_best_move(board_str, player, opponent):
-    board = [['E', 'E', 'E'], ['E', 'E', 'E'], ['E', 'E', 'E']]
-    itr = 0
-    for i in range(3):
-        for j in range(3):
-            board[i][j] = board_str[itr]
-            itr += 1
-    b = board
+def deserialize_board(board_string):
+    return [[x for x in board_string[i:i+int(sqrt(len(board_string)))]] for i in range(0, len(board_string), int(sqrt(len(board_string))))]
 
-    bestMove = getBestMove(b, player, opponent)
-    return bestMove
+
+def find_best_move(board_string, player, opponent):
+    return getBestMove(deserialize_board(board_string), player, opponent)
