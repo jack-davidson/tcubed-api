@@ -162,7 +162,7 @@ def getBestMove(board, player, opponent):
 
 
 def deserialize_board(board_string):
-    return [[x for x in board_string[i:i+3]] for i in range(0, len(board_string), 3)]
+    return [[x for x in board_string[i:i+int(sqrt(len(board_string)))]] for i in range(0, len(board_string), int(sqrt(len(board_string))))]
 
 
 def find_best_move(board_string, player, opponent):
