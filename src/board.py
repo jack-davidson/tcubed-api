@@ -120,7 +120,7 @@ def minimax(board, depth, isMax, player, opponent):
 
 
 # This will return the best possible move for the player
-def getBestMove(board, player, opponent):
+def best_move(board, player, opponent):
     bestVal = -1000
     bestMove = (-1, -1)
 
@@ -156,8 +156,6 @@ def getBestMove(board, player, opponent):
 
 
 def deserialize_board(board_string):
-    return [[x for x in board_string[i:i+int(sqrt(len(board_string)))]] for i in range(0, len(board_string), int(sqrt(len(board_string))))]
-
-
-def find_best_move(board_string, player, opponent):
-    return getBestMove(deserialize_board(board_string), player, opponent)
+    return [
+        [x for x in board_string[i:i + int(sqrt(len(board_string)))]]
+        for i in range(0, len(board_string), int(sqrt(len(board_string))))]
