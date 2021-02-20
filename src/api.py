@@ -40,7 +40,7 @@ def home():
 # receives board encoded as string and turn
 # returns coordinates of best move
 @api.get("/board/{board_string}/player/{player}", response_class=JSONResponse)
-def board(board_string: str, player: str, response: Response):
+def board(board_string, player, response):
     return find_best_move(board_string_to_matrix(board_string), players[player])
 
 
