@@ -83,7 +83,7 @@ def minimax(board: list[list[turn.Player]], depth: int, is_max: bool,
         return best
 
 
-def best_move(board, player):
+def best_move(board, player) -> tuple[tuple[int]]:
     best_move: tuple[tuple[int]]
     best_score = -1000
 
@@ -102,6 +102,5 @@ def best_move(board, player):
 
 
 def deserialize(board: str) -> list[list[turn.Player]]:
-    return [
-        [turn.deserialize(x) for x in board[i:i + int(sqrt(len(board)))]]
-        for i in range(0, len(board), int(sqrt(len(board))))]
+    return [[turn.deserialize(x) for x in board[i:i + int(sqrt(len(board)))]]
+            for i in range(0, len(board), int(sqrt(len(board))))]
