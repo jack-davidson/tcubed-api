@@ -4,11 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from markdown import markdown
 
-from board import deserialize_board, best_move
+import board
 
-from square import perfect_square
+import square
 
-from player import Player
+import turn
 
 api = FastAPI()
 
@@ -34,8 +34,11 @@ def home():
 # receives board encoded as string and current player
 # returns coordinates of best move
 @api.get("/board/{board_string}/player/{player}", response_class=JSONResponse)
-def board(board_string: str, player: str, response: Response):
-    if not perfect_square(len(board_string)):
+def ai(board_string: str, player: str, response: Response):
+    if not square.perfect_square(len(board_string)):
         return {"error": "length(board_string) not perfect square"}
 
-    return best_move(deserialize_board(board_string), Player.player(player))
+    board_matrix = board.deserialize(board_string)
+    current_turn = turn.deserialize(player)
+
+    return board.best_move(board_matrix, current_turn)

@@ -1,16 +1,16 @@
 from math import sqrt
-from player import Player
+import turn
 
 
-def moves_left(board: list[list[Player]]) -> bool:
+def moves_left(board: list[list[turn.Player]]) -> bool:
     for row in board:
         for cell in row:
-            if cell == Player.E:
+            if cell == turn.Player.E:
                 return True
     return False
 
 
-def evaluate(board: list[list[Player]], player: Player) -> bool:
+def evaluate(board: list[list[turn.Player]], player: turn.Player) -> bool:
     # Checking for Rows for X or O victory.
     for row in range(3):
         if board[row][0] == board[row][1] and board[row][1] == board[row][2]:
@@ -48,7 +48,8 @@ def evaluate(board: list[list[Player]], player: Player) -> bool:
     return 0
 
 
-def minimax(board: list[list[Player]], depth: int, is_max: bool, player: Player):
+def minimax(board: list[list[turn.Player]], depth: int, is_max: bool,
+            player: turn.Player):
     score = evaluate(board, player)
 
     if score != 0:
@@ -61,11 +62,11 @@ def minimax(board: list[list[Player]], depth: int, is_max: bool, player: Player)
         best = -1000
         for i in range(3):
             for j in range(3):
-                if board[i][j] == Player.E:
+                if board[i][j] == turn.Player.E:
                     board[i][j] = player
                     best = max(best,
                                minimax(board, depth + 1, not is_max, player))
-                    board[i][j] = Player.E
+                    board[i][j] = turn.Player.E
 
         return best
 
@@ -73,11 +74,11 @@ def minimax(board: list[list[Player]], depth: int, is_max: bool, player: Player)
         best = 1000
         for i in range(3):
             for j in range(3):
-                if board[i][j] == Player.E:
+                if board[i][j] == turn.Player.E:
                     board[i][j] = -player
                     best = min(best, minimax(board, depth + 1, not is_max,
                                              player))
-                    board[i][j] = Player.E
+                    board[i][j] = turn.Player.E
 
         return best
 
@@ -88,10 +89,10 @@ def best_move(board, player):
 
     for i in range(3):
         for j in range(3):
-            if board[i][j] == Player.E:
+            if board[i][j] == turn.Player.E:
                 board[i][j] = player
                 score = minimax(board, 0, False, player)
-                board[i][j] = Player.E
+                board[i][j] = turn.Player.E
 
                 if score > best_score:
                     best_move = (i, j)
@@ -100,7 +101,7 @@ def best_move(board, player):
     return best_move
 
 
-def deserialize_board(board: str) -> list[list[Player]]:
+def deserialize(board: str) -> list[list[turn.Player]]:
     return [
-        [Player.player(x) for x in board[i:i + int(sqrt(len(board)))]]
+        [turn.deserialize(x) for x in board[i:i + int(sqrt(len(board)))]]
         for i in range(0, len(board), int(sqrt(len(board))))]
