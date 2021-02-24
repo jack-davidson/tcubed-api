@@ -10,6 +10,7 @@ def moves_left(board: list[list[turn.Player]]) -> bool:
     return False
 
 
+# THIS IS HORRIBLE CODE
 def evaluate(board: list[list[turn.Player]], player: turn.Player) -> bool:
     # Checking for Rows for X or O victory.
     for row in range(3):
